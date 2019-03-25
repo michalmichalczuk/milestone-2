@@ -1,6 +1,5 @@
 
-var taskArray = []; //use local storage as starting state?
-var editMode = false;
+var taskArray = [];
 
 window.onload = function () {
 
@@ -11,12 +10,12 @@ window.onload = function () {
     var searchBtn = document.getElementById('searchBtn');
     searchBtn.addEventListener('click', searchTask);
 
-
     //creating a task object and running showData
 
     function createTask() {
         var titleInput = document.getElementById('titleInput').value;
         var detailInput = document.getElementById('detailInput').value;
+
 
         var task = {};
         task['title'] = titleInput;
@@ -25,16 +24,20 @@ window.onload = function () {
 
         taskArray.push(task);
         showData(taskArray);
-
+        
     }
 
 
     function showData(array) {
         tbody.innerHTML = "";
-        for (i = 0; i < array.length; i++) {
+        var thead = document.getElementById('thead');
+        for (var i = 0; i < array.length; i++) {
             var nextRow = createRow(array[i]);
             tbody.appendChild(nextRow);
         }
+        document.getElementById('titleInput').value = "";
+        document.getElementById('detailInput').value = "";
+        thead.style.display = 'table-row';
     }
 
 
@@ -67,20 +70,31 @@ window.onload = function () {
         nextTr.appendChild(cell2);
 
 
-        //edit and remove buttons added to html
+        //edit, remove and status buttons added to html
         var removeBtn = document.createElement('button');
         removeBtn.innerText = 'Delete';
         removeBtn.type = 'submit';
         removeBtn.id = object.id;
-        nextTr.append(removeBtn);
+        nextTr.appendChild(removeBtn);
         removeBtn.addEventListener("click", removeTask);
 
         var editBtn = document.createElement('button');
         editBtn.innerText = 'Edit';
         editBtn.type = 'submit';
         editBtn.id = object.id;
-        nextTr.append(editBtn);
+        nextTr.appendChild(editBtn);
         editBtn.addEventListener("click", editTask);
+
+        var selectInput = document.createElement('select');
+        selectInput.id = object.id;
+
+        var options = ['Not Started', 'Working on it', 'Done'];
+        for (var i = 0; i < options.length; i++) {
+            var nextOption = document.createElement('option');
+            nextOption.innerText = options[i];
+            selectInput.appendChild(nextOption);
+        }
+        nextTr.appendChild(selectInput);
 
         return nextTr;
     }
@@ -107,8 +121,7 @@ window.onload = function () {
 
         titleInput.value = taskArray[indexToEdit].title;
         detailInput.value = taskArray[indexToEdit].detail;
-
-
+        confirmBtn.innerText = "Save";
 
         function processEdit() {
             var editedTask = {};
@@ -119,6 +132,7 @@ window.onload = function () {
             taskArray[indexToEdit] = editedTask;
 
             showData(taskArray);
+            confirmBtn.innerText = "Add";
             confirmBtn.removeEventListener('click', processEdit);
             confirmBtn.addEventListener('click', createTask);
         }
@@ -128,8 +142,8 @@ window.onload = function () {
     //search task
     function searchTask() {
         var searchedPhrase = document.getElementById('searchInput').value;
-        var filteredArray = taskArray.filter(el => (el.title || el.detail) === searchedPhrase);
+        var filteredArray = taskArray.filter(el => el.title === searchedPhrase || el.detail === searchedPhrase);
         showData(filteredArray);
     }
 
-}//onload stache
+} //onload stache

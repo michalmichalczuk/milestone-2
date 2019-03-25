@@ -6,13 +6,23 @@
 </head>
 
 <body>
-    <div class="container">
-        <input type="text" id="titleInput" />
-        <input type="text" id="detailInput" />
-        <button type="submit" id="confirmBtn">Confirm</button>
-        <input type="text" id="searchInput" />
+
+    <div id="container">
+        <h2>My Task List</h2>
+        <input type="text" id="titleInput" placeholder="Title" />
+        <input type="text" id="detailInput" placeholder="Details" />
+        <button type="submit" id="confirmBtn">Add</button>
+        <input type="text" id="searchInput" placeholder="Search" />
         <button type="submit" id="searchBtn">Search</button>
+    </div>
+    <div id="container_2">
         <table>
+            <thead>
+                <tr id="thead">
+                    <td>Title</td>
+                    <td>Details</td>
+                </tr>
+            </thead>
             <tbody id="tbody"></tbody>
         </table>
     </div>
